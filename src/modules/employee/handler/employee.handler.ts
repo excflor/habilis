@@ -3,6 +3,9 @@ import { EmployeeService } from '../service/employee.service';
 import { EmployeeRepositoryImpl } from '../repository/employee.repository.impl';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import { ErrorHandler } from '../../../utils/error.util';
+import { formatResponse } from '../../../utils/response.util';
+import { NotFoundError } from '../../../utils/custom-error.util';
 
 export class EmployeeHandler {
   private employeeService: EmployeeService;
@@ -16,28 +19,22 @@ export class EmployeeHandler {
     try {
       const dto: CreateEmployeeDto = req.body;
       const employee = await this.employeeService.create(dto);
+      const response = formatResponse(201, 'success create employee', employee);
 
-      res.status(201).json(employee);
+      res.status(201).json(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(500).json({ message: error.message });
-      } else {
-        res.status(500).json({ message: 'An unexpected error occurred' });
-      }
+      ErrorHandler.handle(res, error);
     }
   };
 
   findAll = async (req: Request, res: Response) => {
     try {
       const employees = await this.employeeService.findAll();
+      const response = formatResponse(200, 'success get employees', employees);
 
-      res.status(200).json(employees);
+      res.status(200).json(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(500).json({ message: error.message });
-      } else {
-        res.status(500).json({ message: 'An unexpected error occurred' });
-      }
+      ErrorHandler.handle(res, error);
     }
   };
 
@@ -46,13 +43,14 @@ export class EmployeeHandler {
       const id: string = req.params.id;
       const employee = await this.employeeService.findById(id);
 
-      res.status(200).json(employee);
-    } catch (error) {
-      if (error instanceof Error) {
-        res.status(500).json({ message: error.message });
-      } else {
-        res.status(500).json({ message: 'An unexpected error occurred' });
+      if (!employee) {
+        throw new NotFoundError(`employee with id ${id} not found`);
       }
+
+      const response = formatResponse(200, 'success get employee', employee);
+      res.status(200).json(response);
+    } catch (error) {
+      ErrorHandler.handle(res, error);
     }
   };
 
@@ -63,17 +61,13 @@ export class EmployeeHandler {
       const updatedEmployee = await this.employeeService.update(id, dto);
 
       if (!updatedEmployee) {
-        res.status(404).json({ message: `Employee with ID ${id} not found` });
-        return;
+        throw new NotFoundError(`employee with id ${id} not found`);
       }
 
-      res.status(200).json(updatedEmployee);
+      const response = formatResponse(200, 'success update employee', updatedEmployee);
+      res.status(200).json(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(500).json({ message: error.message });
-      } else {
-        res.status(500).json({ message: 'An unexpected error occurred' });
-      }
+      ErrorHandler.handle(res, error);
     }
   };
 
@@ -82,14 +76,11 @@ export class EmployeeHandler {
       const id: string = req.params.id;
 
       await this.employeeService.delete(id);
+      const response = formatResponse(200, 'success delete employee', null);
 
-      res.status(200).json({ message: 'data has been deleted' });
+      res.status(200).json(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(500).json({ message: error.message });
-      } else {
-        res.status(500).json({ message: 'An unexpected error occurred' });
-      }
+      ErrorHandler.handle(res, error);
     }
   };
 }
