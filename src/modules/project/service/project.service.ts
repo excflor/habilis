@@ -7,13 +7,13 @@ export class ProjectService {
   constructor(private readonly projectRepository: ProjectRepository) {}
 
   async create(dto: CreateProjectDto): Promise<Project> {
-    const project = Project.build({
+    const projectData = Project.build({
       name: dto.name,
       deadline: dto.deadline,
       status: dto.status,
     });
 
-    await this.projectRepository.create(project);
+    const project = await this.projectRepository.create(projectData);
 
     return project;
   }

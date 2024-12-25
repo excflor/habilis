@@ -7,13 +7,13 @@ export class EmployeeService {
   constructor(private readonly employeeRepository: EmployeeRepository) {}
 
   async create(dto: CreateEmployeeDto): Promise<Employee> {
-    const employee = Employee.build({
+    const employeeData = Employee.build({
       name: dto.name,
       email: dto.email,
       role: dto.role,
     });
 
-    await this.employeeRepository.create(employee);
+    const employee = await this.employeeRepository.create(employeeData);
 
     return employee;
   }

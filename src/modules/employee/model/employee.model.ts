@@ -8,7 +8,10 @@ import {
   UpdatedAt,
   IsEmail,
   DeletedAt,
+  BelongsToMany,
 } from 'sequelize-typescript';
+import { Project } from '../../project/model/project.model';
+import { Assignment } from '../../assignment/model/assignment.model';
 
 @Table({ tableName: 'employees', timestamps: true, paranoid: true })
 export class Employee extends Model {
@@ -63,4 +66,7 @@ export class Employee extends Model {
     allowNull: true,
   })
   deletedAt?: Date;
+
+  @BelongsToMany(() => Project, () => Assignment)
+  projects!: Project[];
 }
