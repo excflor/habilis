@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { ProjectService } from '../service/project.service';
 import { ProjectRepositoryImpl } from '../repository/project.repository.impl';
-import { CreateProjectDto } from './dto/create-project.dto';
-import { UpdateProjectDto } from './dto/update-project.dto';
 import { formatResponse } from '../../../utils/response.util';
 import { ErrorHandler } from '../../../utils/error.util';
 import { NotFoundError } from '../../../utils/custom-error.util';
+import { CreateProjectSchema } from './dto/create-project.dto';
+import { UpdateProjectSchema } from './dto/update-project.dto';
 
 export class ProjectHandler {
   private projectService: ProjectService;
@@ -17,7 +17,7 @@ export class ProjectHandler {
 
   create = async (req: Request, res: Response) => {
     try {
-      const dto: CreateProjectDto = req.body;
+      const dto = CreateProjectSchema.parse(req.body);
       const project = await this.projectService.create(dto);
       const response = formatResponse(200, 'success create project', project);
 
@@ -57,7 +57,7 @@ export class ProjectHandler {
   update = async (req: Request, res: Response) => {
     try {
       const id: string = req.params.id;
-      const dto: UpdateProjectDto = req.body;
+      const dto = UpdateProjectSchema.parse(req.body);
       const updatedProject = await this.projectService.update(id, dto);
 
       if (!updatedProject) {

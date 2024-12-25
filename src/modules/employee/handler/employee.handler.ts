@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { EmployeeService } from '../service/employee.service';
 import { EmployeeRepositoryImpl } from '../repository/employee.repository.impl';
-import { CreateEmployeeDto } from './dto/create-employee.dto';
-import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import { CreateEmployeeSchema } from './dto/create-employee.dto';
 import { ErrorHandler } from '../../../utils/error.util';
 import { formatResponse } from '../../../utils/response.util';
 import { NotFoundError } from '../../../utils/custom-error.util';
+import { UpdateEmployeeSchema } from './dto/update-employee.dto';
 
 export class EmployeeHandler {
   private employeeService: EmployeeService;
@@ -17,7 +17,7 @@ export class EmployeeHandler {
 
   create = async (req: Request, res: Response) => {
     try {
-      const dto: CreateEmployeeDto = req.body;
+      const dto = CreateEmployeeSchema.parse(req.body);
       const employee = await this.employeeService.create(dto);
       const response = formatResponse(201, 'success create employee', employee);
 
@@ -57,7 +57,7 @@ export class EmployeeHandler {
   update = async (req: Request, res: Response) => {
     try {
       const id: string = req.params.id;
-      const dto: UpdateEmployeeDto = req.body;
+      const dto = UpdateEmployeeSchema.parse(req.body);
       const updatedEmployee = await this.employeeService.update(id, dto);
 
       if (!updatedEmployee) {

@@ -3,6 +3,7 @@ import { AssignmentService } from '../service/assignment.service';
 import { AssignmentRepositoryImpl } from '../repository/assignment.repository.impl';
 import { formatResponse } from '../../../utils/response.util';
 import { ErrorHandler } from '../../../utils/error.util';
+import { AssignEmployeesSchema } from './dto/assignment.dto';
 
 export class AssignmentHandler {
   private assignmentService: AssignmentService;
@@ -14,7 +15,7 @@ export class AssignmentHandler {
 
   assignEmployeesToProject = async (req: Request, res: Response) => {
     try {
-      const { projectId, employeeIds } = req.body;
+      const { projectId, employeeIds } = AssignEmployeesSchema.parse(req.body);
       const assignments = await this.assignmentService.assignEmployeesToProject(
         projectId,
         employeeIds
