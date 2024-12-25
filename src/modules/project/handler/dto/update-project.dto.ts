@@ -2,7 +2,10 @@ import { z } from 'zod';
 
 export const UpdateProjectSchema = z.object({
   name: z.string().min(1, 'project name must be a non-empty string').optional(),
-  deadline: z.date().optional(),
+  deadline: z.preprocess(
+    (value) => (typeof value === 'string' ? new Date(value) : value),
+    z.date().optional()
+  ),
   status: z.enum(['PENDING', 'IN_PROGRESS', 'COMPLETED']).optional(),
 });
 
