@@ -1,4 +1,4 @@
-import { Employee } from './employee.model';
+import { Employee } from '../model/employee.model';
 
 export interface EmployeeRepository {
   create(employee: Employee): Promise<Employee>;

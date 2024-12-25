@@ -1,7 +1,7 @@
 import { CreateEmployeeDto } from '../handler/dto/create-employee.dto';
 import { UpdateEmployeeDto } from '../handler/dto/update-employee.dto';
 import { Employee } from '../model/employee.model';
-import { EmployeeRepository } from '../model/employee.repository';
+import { EmployeeRepository } from '../repository/employee.repository';
 
 export class EmployeeService {
   constructor(private readonly employeeRepository: EmployeeRepository) {}

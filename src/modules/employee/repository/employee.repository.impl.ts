@@ -1,5 +1,5 @@
 import { Employee } from '../model/employee.model';
-import { EmployeeRepository } from '../model/employee.repository';
+import { EmployeeRepository } from './employee.repository';
 
 export class EmployeeRepositoryImpl implements EmployeeRepository {
   async create(employee: Employee): Promise<Employee> {
