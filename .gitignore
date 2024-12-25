@@ -21,6 +21,5 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
-.env.*
 
 package-lock.json
