@@ -4,13 +4,16 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const dbPort = process.env.DB_PORT ? +process.env.DB_PORT : 5432;
 const sequelize = new Sequelize({
   dialect: 'postgres',
   host: process.env.DB_HOST,
+  port: dbPort,
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   models: [Employee],
+  logging: true,
 });
 
 export default sequelize;

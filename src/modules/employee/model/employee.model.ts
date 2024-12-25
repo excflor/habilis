@@ -1,6 +1,16 @@
-import { Column, Model, PrimaryKey, Table, DataType, CreatedAt, UpdatedAt, IsEmail, DeletedAt } from 'sequelize-typescript';
+import {
+  Column,
+  Model,
+  PrimaryKey,
+  Table,
+  DataType,
+  CreatedAt,
+  UpdatedAt,
+  IsEmail,
+  DeletedAt,
+} from 'sequelize-typescript';
 
-@Table({ tableName: 'employees', timestamps: true })
+@Table({ tableName: 'employees', timestamps: true, paranoid: true })
 export class Employee extends Model {
   @PrimaryKey
   @Column({
@@ -31,6 +41,7 @@ export class Employee extends Model {
 
   @CreatedAt
   @Column({
+    field: 'created_at',
     type: DataType.DATE,
     defaultValue: DataType.NOW,
     allowNull: true,
@@ -39,6 +50,7 @@ export class Employee extends Model {
 
   @UpdatedAt
   @Column({
+    field: 'updated_at',
     type: DataType.DATE,
     allowNull: true,
   })
@@ -46,6 +58,7 @@ export class Employee extends Model {
 
   @DeletedAt
   @Column({
+    field: 'deleted_at',
     type: DataType.DATE,
     allowNull: true,
   })
